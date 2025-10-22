@@ -1,0 +1,64 @@
+<div class="p-4 md:p-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Upcoming Events</h1>
+    <a mat-flat-button color="primary" routerLink="/events/create">
+      <mat-icon>add</mat-icon>
+      <span>Create Event</span>
+    </a>
+  </div>
+
+  @if (events$ | async; as events) { @if (events.length === 0) {
+  <div class="text-center p-10 mt-10 bg-gray-50 rounded-lg">
+    <p class="text-lg text-gray-600">No events found.</p>
+    <p class="text-gray-500 mt-2">Be the first to create one!</p>
+  </div>
+  }
+
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+  >
+    @for (event of events; track event.id) {
+    <mat-card
+      class="flex flex-col cursor-pointer hover:shadow-xl transition-shadow duration-300"
+      [routerLink]="['/events', event.id]"
+    >
+      <mat-card-header class="!pb-2">
+        <mat-card-title class="!text-lg !font-semibold">{{
+          event.name
+        }}</mat-card-title>
+        <mat-card-subtitle>{{
+          event.eventTimestamp | date : "medium"
+        }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="flex-grow">
+        <div class="space-y-2 text-sm text-gray-700">
+          <div class="flex items-center">
+            <mat-icon class="!w-4 !h-4 mr-2 text-gray-500">groups</mat-icon>
+            <span
+              >{{ event.participantCount }} /
+              {{ event.capacity || "∞" }} participants</span
+            >
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="!p-4 !pt-0">
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="$event.stopPropagation(); joinEvent(event.id)"
+        >
+          Join
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    }
+  </div>
+
+  } @else {
+  <div class="flex justify-center items-center h-64">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+  }
+</div>

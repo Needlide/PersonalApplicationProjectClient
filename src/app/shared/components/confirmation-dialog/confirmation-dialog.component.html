@@ -1,0 +1,12 @@
+<h1 mat-dialog-title class="font-bold">{{ data.title }}</h1>
+
+<div mat-dialog-content>
+  <p>{{ data.message }}</p>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">No</button>
+  <button mat-flat-button color="warn" (click)="onYesClick()" cdkFocusInitial>
+    Yes, Delete
+  </button>
+</div>

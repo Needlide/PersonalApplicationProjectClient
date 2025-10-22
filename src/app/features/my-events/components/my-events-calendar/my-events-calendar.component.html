@@ -1,0 +1,63 @@
+<div class="p-4 md:p-8">
+  <div
+    class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4"
+  >
+    <h1 class="text-3xl font-bold text-gray-800">My Events</h1>
+    <div class="flex space-x-2">
+      <button
+        mat-stroked-button
+        (click)="setView(CalendarView.Month)"
+        [class.bg-indigo-100]="view === CalendarView.Month"
+      >
+        Month
+      </button>
+      <button
+        mat-stroked-button
+        (click)="setView(CalendarView.Week)"
+        [class.bg-indigo-100]="view === CalendarView.Week"
+      >
+        Week
+      </button>
+    </div>
+  </div>
+
+  @if (calendarEvents$ | async; as events) { @if (events.length > 0) {
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="CalendarView.Month"
+      [viewDate]="viewDate"
+      [events]="events"
+      (eventClicked)="eventClicked($event)"
+    >
+    </mwl-calendar-month-view>
+
+    <mwl-calendar-week-view
+      *ngSwitchCase="CalendarView.Week"
+      [viewDate]="viewDate"
+      [events]="events"
+      (eventClicked)="eventClicked($event)"
+    >
+    </mwl-calendar-week-view>
+  </div>
+  } @else {
+  <div class="text-center p-10 bg-gray-50">
+    <p class="text-lg text-gray-600">You are not part of any events yet.</p>
+    <a
+      routerLink="/events"
+      class="mt-4 inline-block text-indigo-600 hover:underline"
+    >
+      Explore public events and join one!
+    </a>
+  </div>
+  } } @else {
+  <div class="text-center p-10">
+    <p class="text-gray-500">Loading events...</p>
+  </div>
+  }
+
+  <ng-template #loading>
+    <div class="text-center p-10">
+      <p class="text-gray-500">Loading events...</p>
+    </div>
+  </ng-template>
+</div>

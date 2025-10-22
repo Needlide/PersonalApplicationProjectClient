@@ -1,0 +1,173 @@
+<div class="min-h-screen bg-gray-100 flex flex-col items-center p-4 pt-10">
+  @if (event$ | async; as event) {
+
+  <mat-card class="w-full max-w-3xl">
+    <form [formGroup]="editEventForm" (ngSubmit)="onSubmit()">
+      <mat-card-header class="!flex !justify-between !items-start !p-6">
+        <div class="flex-grow">
+          @if (!isEditing) {
+          <mat-card-title class="!text-3xl !font-bold !text-gray-800">{{
+            event.name
+          }}</mat-card-title>
+          <mat-card-subtitle class="!text-base !text-gray-500 mt-1">
+            {{ event.eventTimestamp | date : "fullDate" }} at
+            {{ event.eventTimestamp | date : "shortTime" }}
+          </mat-card-subtitle>
+          } @else {
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Event Title</mat-label>
+            <input matInput formControlName="name" required />
+          </mat-form-field>
+          }
+        </div>
+
+        @if (isOrganizer) {
+        <div class="flex-shrink-0 ml-4">
+          @if (!isEditing) {
+          <button
+            mat-icon-button
+            (click)="toggleEditMode()"
+            aria-label="Edit event"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="openDeleteDialog()"
+            aria-label="Delete event"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+          }
+        </div>
+        }
+      </mat-card-header>
+
+      <mat-card-content class="p-6">
+        <div class="mb-6">
+          <h3 class="text-sm font-medium text-gray-500">Description</h3>
+          @if (!isEditing) {
+          <p class="mt-1 text-base text-gray-800 whitespace-pre-wrap">
+            {{ event.description || "No description provided." }}
+          </p>
+          } @else {
+          <mat-form-field appearance="outline" class="w-full mt-1">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="3"
+            ></textarea>
+          </mat-form-field>
+          }
+        </div>
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 border-t border-gray-200 pt-6"
+        >
+          <div>
+            <h3 class="text-sm font-medium text-gray-500">Location</h3>
+            @if (!isEditing) {
+            <p class="mt-1 text-base text-gray-800">
+              {{ event.location || "Not specified" }}
+            </p>
+            } @else {
+            <mat-form-field appearance="outline" class="w-full mt-1">
+              <mat-label>Location</mat-label>
+              <input matInput formControlName="location" />
+            </mat-form-field>
+            }
+          </div>
+
+          @if (isEditing) {
+          <div>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Date & Time</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="eventTimestamp"
+                required
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          }
+
+          <div>
+            <h3 class="text-sm font-medium text-gray-500">Capacity</h3>
+            @if (!isEditing) {
+            <p class="mt-1 text-base text-gray-800">
+              {{ event.capacity ? event.capacity + " people" : "Unlimited" }}
+            </p>
+            } @else {
+            <mat-form-field appearance="outline" class="w-full mt-1">
+              <mat-label>Capacity (Optional)</mat-label>
+              <input matInput type="number" formControlName="capacity" />
+            </mat-form-field>
+            }
+          </div>
+
+          <div>
+            <h3 class="text-sm font-medium text-gray-500">Organizer</h3>
+            <p class="mt-1 text-base text-gray-800">
+              {{ event.organizer.firstName }} {{ event.organizer.lastName }}
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-6 border-t border-gray-200 pt-6">
+          <h3 class="text-sm font-medium text-gray-500">
+            Participants ({{ event.participantCount }} /
+            {{ event.capacity || "∞" }})
+          </h3>
+          @if (event.participants && event.participants.length > 0) {
+          <ul class="mt-2 space-y-2">
+            @for (participant of event.participants; track participant.id) {
+            <li class="text-base text-gray-800">
+              {{ participant.firstName }} {{ participant.lastName }}
+            </li>
+            }
+          </ul>
+          } @else {
+          <p class="mt-1 text-base text-gray-600">No one has joined yet.</p>
+          }
+        </div>
+
+        @if (!isEditing && !isOrganizer) {
+        <mat-card-actions class="!p-0 mt-8">
+          <button mat-flat-button color="primary" class="w-full !py-3">
+            Join Event
+          </button>
+        </mat-card-actions>
+        } @if (isEditing) {
+        <div class="flex justify-end gap-4 mt-8">
+          <button mat-stroked-button type="button" (click)="toggleEditMode()">
+            Cancel
+          </button>
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="editEventForm.invalid || isLoading"
+          >
+            Save Changes
+          </button>
+        </div>
+        }
+      </mat-card-content>
+    </form>
+  </mat-card>
+
+  } @else {
+  <div class="flex justify-center items-center">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+  }
+</div>
