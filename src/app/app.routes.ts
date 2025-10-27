@@ -48,4 +48,13 @@ export const routes: Routes = [
         (m) => m.RegisterComponent
       ),
   },
+  {
+    path: '',
+    redirectTo: '/events',
+    pathMatch: 'full',
+  },
+  {
+    path: '**',
+    redirectTo: '/events',
+  },
 ];
