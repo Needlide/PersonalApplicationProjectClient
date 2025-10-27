@@ -92,6 +92,7 @@ export class EventDetailsComponent implements OnInit {
           location: event.location,
           capacity: event.capacity,
           visible: event.visible,
+          tags: event.tags,
         };
 
         this.editEventForm.patchValue({
