@@ -1,3 +1,4 @@
+import { TagDto } from '../tag/tag.dto';
 import { UserDto } from '../user/user.dto';
 
 export interface EventDetailsDto {
@@ -11,4 +12,5 @@ export interface EventDetailsDto {
   visible: boolean;
   organizer: UserDto;
   participants: UserDto[];
+  tags: TagDto[];
 }

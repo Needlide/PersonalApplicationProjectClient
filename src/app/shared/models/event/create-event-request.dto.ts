@@ -1,3 +1,5 @@
+import { TagDto } from '../tag/tag.dto';
+
 export interface CreateEventRequestDto {
   name: string;
   description?: string;
@@ -5,4 +7,5 @@ export interface CreateEventRequestDto {
   location?: string;
   capacity?: number;
   visible: boolean;
+  tags: TagDto[];
 }

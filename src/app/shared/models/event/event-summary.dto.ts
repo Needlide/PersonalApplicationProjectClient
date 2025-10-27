@@ -1,3 +1,5 @@
+import { TagDto } from '../tag/tag.dto';
+
 export interface EventSummaryDto {
   id: number;
   name: string;
@@ -5,4 +7,5 @@ export interface EventSummaryDto {
   participantCount: number;
   capacity?: number;
   visible: boolean;
+  tags: TagDto[];
 }
