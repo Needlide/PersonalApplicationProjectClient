@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve & ngtw watch",
+    "build": "ngtw build && ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "prestart": "ngtw build"
   },
   "private": true,
   "dependencies": {
@@ -20,12 +21,13 @@
     "@angular/platform-browser": "^19.2.15",
     "@angular/platform-browser-dynamic": "^19.2.15",
     "@angular/router": "^19.2.15",
-    "@tailwindcss/postcss": "^4.1.15",
+    "@tailwindcss/postcss": "^4.1.16",
     "angular-calendar": "^0.31.1",
     "fast-json-patch": "^3.1.1",
+    "ng-tailwindcss": "^2.3.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "zone.js": "^0.15.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.15",
@@ -40,7 +42,8 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "postcss": "^8.5.6",
-    "tailwindcss": "^3.4.10",
+    "tailwindcss": "^4.1.16",
     "typescript": "~5.7.2"
-  }
+  },
+  "packageManager": "yarn@4.10.3+sha512.c38cafb5c7bb273f3926d04e55e1d8c9dfa7d9c3ea1f36a4868fa028b9e5f72298f0b7f401ad5eb921749eb012eb1c3bb74bf7503df3ee43fd600d14a018266f"
 }
