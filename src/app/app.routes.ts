@@ -3,7 +3,7 @@ import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
-    path: 'event',
+    path: 'event/:id',
     loadComponent: () =>
       import(
         './features/events/components/event-details/event-details.component'

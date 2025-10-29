@@ -1,11 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import {
-  CalendarCommonModule,
-  CalendarEvent,
-  CalendarModule,
-  CalendarView,
-} from 'angular-calendar';
+import { CalendarEvent, CalendarModule, CalendarView } from 'angular-calendar';
 import { Observable, map } from 'rxjs';
 import { EventDetailsDto } from '../../../../shared/models/event/event-details.dto';
 import { EventsService } from '../../../../core/services/events.service';
@@ -13,7 +8,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-my-events-calendar',
-  imports: [CommonModule, CalendarModule, CalendarCommonModule, RouterLink],
+  imports: [CommonModule, CalendarModule, RouterLink],
   templateUrl: './my-events-calendar.component.html',
   styleUrls: ['./my-events-calendar.component.scss'],
 })
@@ -65,7 +60,7 @@ export class MyEventsCalendarComponent implements OnInit {
   }: {
     event: CalendarEvent<{ event: EventDetailsDto }>;
   }): void {
-    const eventId = event.id;
-    this.router.navigate(['/events', eventId]);
+    const eventId = event.meta?.event.id;
+    this.router.navigate(['/event', eventId]);
   }
 }
