@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^19.2.15",
     "@angular/platform-browser-dynamic": "^19.2.15",
     "@angular/router": "^19.2.15",
+    "@google/generative-ai": "^0.24.1",
     "@tailwindcss/postcss": "^4.1.16",
     "angular-calendar": "^0.31.1",
     "date-fns": "^4.1.0",
