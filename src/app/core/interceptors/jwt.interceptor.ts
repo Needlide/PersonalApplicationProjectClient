@@ -4,11 +4,13 @@ import { Router } from '@angular/router';
 import { throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
+import { UserStore } from '../store/user.store';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
   const token = authService.getToken();
+  const userStore = inject(UserStore);
 
   if (token) {
     req = req.clone({
@@ -35,7 +37,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
             return next(newReq);
           }),
           catchError(() => {
-            authService.logout();
+            userStore.logout();
 
             router.navigate(['/login'], {
               queryParams: { sessionExpired: 'true' },

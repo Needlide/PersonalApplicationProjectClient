@@ -1,4 +1,4 @@
-<div
+<!-- <div
   class="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4"
 >
   <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6 md:p-8">
@@ -67,6 +67,124 @@
             @if (!isLoading) {
             <span>Sign In</span>
             } @if (isLoading) {<span>Signing In...</span>}
+          </button>
+        </div>
+
+        <div class="text-center mt-6">
+          <p class="text-sm text-gray-600">
+            Don't have an account?
+            <a
+              routerLink="/register"
+              class="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Sign up
+            </a>
+          </p>
+        </div>
+      </div>
+    </form>
+  </div>
+</div> -->
+
+<div
+  class="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4"
+>
+  <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6 md:p-8">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">Enter Your Account</h1>
+      <p class="text-gray-500 mt-2">
+        Join to start creating and attending events.
+      </p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      @if (userStore.error()) {
+      <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+        <p class="text-red-800 text-sm">{{ userStore.error() }}</p>
+      </div>
+      }
+
+      <div class="space-y-4">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700"
+            >Email Address</label
+          >
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="you@example.com"
+          />
+          @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty
+          || loginForm.get('email')?.touched)) {
+          <div class="text-red-600 text-xs mt-1">
+            @if (loginForm.get('email')?.errors?.['required']) {
+            <div>Email is required.</div>
+            } @if (loginForm.get('email')?.errors?.['email']) {
+            <div>Please enter a valid email address.</div>
+            }
+          </div>
+          }
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700"
+            >Password</label
+          >
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="••••••••"
+          />
+          @if (loginForm.get('password')?.invalid &&
+          (loginForm.get('password')?.dirty ||
+          loginForm.get('password')?.touched)) {
+          <div class="text-red-600 text-xs mt-1">
+            @if (loginForm.get('password')?.errors?.['required']) {
+            <div>Password is required.</div>
+            } @if (loginForm.get('password')?.errors?.['minlength']) {
+            <div>Password must be at least 8 characters long.</div>
+            }
+          </div>
+          }
+        </div>
+
+        <div class="mt-6">
+          <button
+            type="submit"
+            [disabled]="loginForm.invalid || userStore.isLoading()"
+            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-300 disabled:cursor-not-allowed transition-colors"
+          >
+            @if (userStore.isLoading()) {
+            <span class="flex items-center gap-2">
+              <svg
+                class="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Signing In...
+            </span>
+            } @else {
+            <span>Sign In</span>
+            }
           </button>
         </div>
 
