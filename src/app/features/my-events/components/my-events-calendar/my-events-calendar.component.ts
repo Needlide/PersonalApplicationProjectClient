@@ -5,6 +5,7 @@ import { Observable, map } from 'rxjs';
 import { EventDetailsDto } from '../../../../shared/models/event/event-details.dto';
 import { EventsService } from '../../../../core/services/events.service';
 import { CommonModule } from '@angular/common';
+import { EventSummaryDto } from '../../../../shared/models/event/event-summary.dto';
 
 @Component({
   selector: 'app-my-events-calendar',
@@ -16,7 +17,7 @@ export class MyEventsCalendarComponent implements OnInit {
   viewDate: Date = new Date();
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
-  calendarEvents$!: Observable<CalendarEvent<{ event: EventDetailsDto }>[]>;
+  calendarEvents$!: Observable<CalendarEvent<{ event: EventSummaryDto }>[]>;
 
   eventService = inject(EventsService);
   router = inject(Router);
@@ -27,7 +28,7 @@ export class MyEventsCalendarComponent implements OnInit {
 
   fetchAndMapEvents(): void {
     this.calendarEvents$ = this.eventService.getMyEvents().pipe(
-      map((apiEvents: EventDetailsDto[]) => {
+      map((apiEvents: EventSummaryDto[]) => {
         return apiEvents.map((apiEvent) => {
           return {
             title: `${apiEvent.name} (${this.formatTime(
