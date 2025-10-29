@@ -56,9 +56,37 @@ export class EventsService {
       .pipe(catchError(handleError));
   }
 
-  getMyEvents(): Observable<EventDetailsDto[]> {
+  getMyEvents(): Observable<EventSummaryDto[]> {
     return this.http
-      .get<EventDetailsDto[]>(`${this.rootUrl}/api/users/me/events`)
+      .get<EventSummaryDto[]>(`${this.rootUrl}/api/users/me/events`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            return of([] as EventSummaryDto[]);
+          }
+
+          return handleError(error);
+        })
+      );
+  }
+
+  getMyOrganizedEvents(): Observable<EventDetailsDto[]> {
+    return this.http
+      .get<EventDetailsDto[]>(`${this.rootUrl}/api/users/me/organized`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            return of([] as EventDetailsDto[]);
+          }
+
+          return handleError(error);
+        })
+      );
+  }
+
+  getMyParticipatingEvents(): Observable<EventDetailsDto[]> {
+    return this.http
+      .get<EventDetailsDto[]>(`${this.rootUrl}/api/users/me/participating`)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 404) {

@@ -117,4 +117,8 @@ export class AuthService {
   public isLoggedIn(): boolean {
     return !!this.getToken();
   }
+
+  public getCurrentUserId(): number | null {
+    return this.currentUserSubject.value?.id ?? null;
+  }
 }
