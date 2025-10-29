@@ -21,13 +21,82 @@
     </div>
   </div>
 
+  <ng-template #monthCellTemplate let-day="day" let-locale="locale">
+    <div class="cal-cell-top">
+      <span class="cal-day-number">{{
+        day.date | calendarDate : "monthViewDayNumber" : locale
+      }}</span>
+    </div>
+    <div class="cal-events">
+      @for (event of day.events; track event.id) {
+      <div
+        class="cal-event p-1 mb-1 rounded cursor-pointer hover:opacity-80 transition-opacity"
+        [style.backgroundColor]="event.color?.secondary"
+        (click)="eventClicked({ event: event })"
+      >
+        <div
+          class="text-xs font-semibold truncate"
+          [style.color]="event.color?.primary"
+        >
+          {{ event.meta.event.name }}
+        </div>
+
+        @if (event.meta.event.tags?.length > 0) {
+        <div class="flex flex-wrap gap-1 mt-1">
+          @for (tag of event.meta.event.tags; track tag.name; let i = $index) {
+          @if (i < 2) {
+          <span
+            class="text-[10px] bg-blue-100 text-blue-800 px-1 py-0.5 rounded-full whitespace-nowrap"
+          >
+            {{ tag.name }}
+          </span>
+          } } @if (event.meta.event.tags.length > 2) {
+          <span class="text-[10px] text-gray-500"
+            >+{{ event.meta.event.tags.length - 2 }}</span
+          >
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </ng-template>
+
+  <ng-template #weekEventTemplate let-weekEvent="weekEvent">
+    <div
+      class="cal-event cursor-pointer p-1 rounded"
+      (click)="eventClicked({ event: weekEvent.event })"
+    >
+      <div class="cal-event-title font-semibold text-xs mb-1">
+        {{ weekEvent.event.meta.event.name }}
+      </div>
+      @if (weekEvent.event.meta.event.tags?.length > 0) {
+      <div class="flex flex-wrap gap-1">
+        @for (tag of weekEvent.event.meta.event.tags; track tag.name; let i =
+        $index) { @if (i < 3) {
+        <span
+          class="text-[10px] bg-blue-100 text-blue-800 px-1 py-0.5 rounded-full whitespace-nowrap"
+        >
+          {{ tag.name }}
+        </span>
+        } } @if (weekEvent.event.meta.event.tags.length > 3) {
+        <span class="text-[10px] text-gray-500"
+          >+{{ weekEvent.event.meta.event.tags.length - 3 }}</span
+        >
+        }
+      </div>
+      }
+    </div>
+  </ng-template>
+
   @if (calendarEvents$ | async; as events) { @if (events.length > 0) {
-  <div [ngSwitch]="view">
+  <div [ngSwitch]="view" class="bg-white rounded-lg shadow-sm overflow-hidden">
     <mwl-calendar-month-view
       *ngSwitchCase="CalendarView.Month"
       [viewDate]="viewDate"
       [events]="events"
-      (eventClicked)="eventClicked($event)"
+      [cellTemplate]="monthCellTemplate"
+      [activeDayIsOpen]="false"
     >
     </mwl-calendar-month-view>
 
@@ -35,12 +104,15 @@
       *ngSwitchCase="CalendarView.Week"
       [viewDate]="viewDate"
       [events]="events"
-      (eventClicked)="eventClicked($event)"
+      [eventTemplate]="weekEventTemplate"
+      [dayStartHour]="0"
+      [dayEndHour]="23"
+      [hourSegments]="2"
     >
     </mwl-calendar-week-view>
   </div>
   } @else {
-  <div class="text-center p-10 bg-gray-50">
+  <div class="text-center p-10 bg-gray-50 rounded-lg">
     <p class="text-lg text-gray-600">You are not part of any events yet.</p>
     <a
       routerLink="/events"
@@ -54,10 +126,4 @@
     <p class="text-gray-500">Loading events...</p>
   </div>
   }
-
-  <ng-template #loading>
-    <div class="text-center p-10">
-      <p class="text-gray-500">Loading events...</p>
-    </div>
-  </ng-template>
 </div>

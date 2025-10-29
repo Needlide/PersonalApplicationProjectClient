@@ -60,7 +60,7 @@ export class MyEventsCalendarComponent implements OnInit {
   }: {
     event: CalendarEvent<{ event: EventDetailsDto }>;
   }): void {
-    const eventId = event.id;
-    this.router.navigate(['/events', eventId]);
+    const eventId = event.meta?.event.id;
+    this.router.navigate(['/event', eventId]);
   }
 }

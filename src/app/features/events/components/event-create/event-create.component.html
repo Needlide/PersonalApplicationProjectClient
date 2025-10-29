@@ -1,4 +1,4 @@
-<div
+<!-- <div
   class="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4"
 >
   <mat-card class="w-full max-w-2xl p-6 md:p-8">
@@ -35,6 +35,35 @@
             cdkTextareaAutosize
             cdkAutosizeMinRows="3"
           ></textarea>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Tags</mat-label>
+          <mat-chip-grid #chipGrid aria-label="Selected tags">
+            @for (tag of selectedTags; track tag.name) {
+            <mat-chip-row (removed)="removeTag(tag)">
+              {{ tag.name }}
+              <button matChipRemove [attr.aria-label]="'Remove ' + tag.name">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+            }
+          </mat-chip-grid>
+          <input
+            placeholder="Add a tag..."
+            #tagInput
+            [formControl]="tagInputControl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipGrid"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selected($event)"
+          >
+            @for (tag of filteredTags$ | async; track tag.name) {
+            <mat-option [value]="tag">{{ tag.name }}</mat-option>
+            }
+          </mat-autocomplete>
         </mat-form-field>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -77,6 +106,159 @@
             />
             @if (createEventForm.get('capacity')?.hasError('min')) {
             <mat-error> Capacity must be a positive number. </mat-error>}
+          </mat-form-field>
+
+          <div class="flex flex-col justify-center">
+            <label
+              id="visibility-radio-group-label"
+              class="text-sm text-gray-600 mb-2"
+              >Visibility</label
+            >
+            <mat-radio-group
+              aria-labelledby="visibility-radio-group-label"
+              class="flex space-x-6"
+              formControlName="visibility"
+            >
+              <mat-radio-button value="Public">Public</mat-radio-button>
+              <mat-radio-button value="Private">Private</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            class="w-full !py-3 !text-base"
+            [disabled]="createEventForm.invalid || isLoading"
+          >
+            @if (!isLoading) {<span>Create Event</span>} @if (isLoading)
+            {<span>Creating...</span>}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div> -->
+
+<div
+  class="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4"
+>
+  <mat-card class="w-full max-w-2xl p-6 md:p-8">
+    <mat-card-header class="!mb-8">
+      <mat-card-title class="!text-3xl !font-bold !text-center !text-gray-800"
+        >Create a New Event</mat-card-title
+      >
+      <mat-card-subtitle class="!text-base !text-center !text-gray-500 mt-2"
+        >Fill out the details below to get started.</mat-card-subtitle
+      >
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="createEventForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Event Title</mat-label>
+          <input
+            matInput
+            formControlName="name"
+            placeholder="e.g., Annual Tech Conference"
+            required
+          />
+          @if (createEventForm.get('name')?.hasError('required')) {
+          <mat-error> Title is required. </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full mt-4">
+          <mat-label>Description</mat-label>
+          <textarea
+            matInput
+            formControlName="description"
+            placeholder="Describe your event..."
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="3"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full mt-4">
+          <mat-label>Tags</mat-label>
+          <mat-chip-grid #chipGrid aria-label="Selected tags">
+            @for (tag of selectedTags; track tag.name) {
+            <mat-chip-row (removed)="removeTag(tag)">
+              {{ tag.name }}
+              <button matChipRemove [attr.aria-label]="'Remove ' + tag.name">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+            }
+          </mat-chip-grid>
+          <input
+            placeholder="Type to add tags or select from suggestions..."
+            #tagInput
+            [formControl]="tagInputControl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="add($event)"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selected($event)"
+          >
+            @for (tag of filteredTags$ | async; track tag.name) {
+            <mat-option [value]="tag">{{ tag.name }}</mat-option>
+            }
+          </mat-autocomplete>
+          <mat-hint
+            >Press Enter or comma to add a new tag, or select from existing
+            ones</mat-hint
+          >
+        </mat-form-field>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Date & Time</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="eventTimestamp"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            @if (createEventForm.get('eventTimestamp')?.hasError('required')) {
+            <mat-error> Date is required. </mat-error>
+            } @if (
+            createEventForm.get('eventTimestamp')?.hasError('dateInPast') ) {
+            <mat-error> Event cannot be in the past. </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <input
+              matInput
+              formControlName="location"
+              placeholder="e.g., 123 Main St, Anytown"
+            />
+          </mat-form-field>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Capacity (Optional)</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="capacity"
+              placeholder="e.g., 100"
+            />
+            @if (createEventForm.get('capacity')?.hasError('min')) {
+            <mat-error> Capacity must be a positive number. </mat-error>
+            }
           </mat-form-field>
 
           <div class="flex flex-col justify-center">

@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {
   BehaviorSubject,
@@ -12,13 +12,14 @@ import { LoginRequestDto } from '../../shared/models/user/login-request.dto';
 import { LoginResponseDto } from '../../shared/models/user/login-response.dto';
 import { UserDto } from '../../shared/models/user/user.dto';
 import { RegisterRequestDto } from '../../shared/models/user/register-request.dto';
+import { handleError } from '../../shared/handle-error';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private readonly rootUrl = 'http://localhost:8080';
+  private readonly rootUrl = 'http://localhost:5047';
 
   private currentUserSubject = new BehaviorSubject<UserDto | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
@@ -41,30 +42,14 @@ export class AuthService {
         tap((response) => {
           this.storeAuthData(response);
         }),
-        catchError(this.handleError)
+        catchError(handleError)
       );
   }
 
   register(credentials: RegisterRequestDto) {
     return this.http
       .post<UserDto>(`${this.rootUrl}/api/auth/register`, credentials)
-      .pipe(catchError(this.handleError));
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    console.error('API Error:', error);
-
-    let userMessage = 'An unknown error occurred. Please try again.';
-
-    if (error.error && typeof error.error.detail === 'string') {
-      userMessage = error.error.detail;
-    } else if (error.error && typeof error.error.message === 'string') {
-      userMessage = error.error.message;
-    } else if (typeof error.error === 'string') {
-      userMessage = error.error;
-    }
-
-    return throwError(() => new Error(userMessage));
+      .pipe(catchError(handleError));
   }
 
   logout() {
@@ -91,7 +76,9 @@ export class AuthService {
       }
 
       return this.http
-        .post<LoginResponseDto>('/api/auth/refresh', { refreshToken })
+        .post<LoginResponseDto>(`${this.rootUrl}/api/auth/refresh`, {
+          refreshToken,
+        })
         .pipe(
           tap((response) => {
             this.isRefreshing = false;

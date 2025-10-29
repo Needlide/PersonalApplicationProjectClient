@@ -21,7 +21,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
       if (
         error instanceof HttpErrorResponse &&
         error.status === 401 &&
-        !req.url.includes('/auth/')
+        !req.url.includes('/api/auth/')
       ) {
         return authService.refreshToken().pipe(
           switchMap((response: any) => {
@@ -37,7 +37,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
           catchError(() => {
             authService.logout();
 
-            router.navigate(['/auth/login'], {
+            router.navigate(['/login'], {
               queryParams: { sessionExpired: 'true' },
             });
 

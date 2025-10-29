@@ -3,7 +3,7 @@ import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
-    path: 'event',
+    path: 'event/:id',
     loadComponent: () =>
       import(
         './features/events/components/event-details/event-details.component'
@@ -47,5 +47,14 @@ export const routes: Routes = [
       import('./features/auth/components/register/register.component').then(
         (m) => m.RegisterComponent
       ),
+  },
+  {
+    path: '',
+    redirectTo: '/events',
+    pathMatch: 'full',
+  },
+  {
+    path: '**',
+    redirectTo: '/events',
   },
 ];
