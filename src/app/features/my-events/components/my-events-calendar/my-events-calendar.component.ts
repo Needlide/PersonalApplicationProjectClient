@@ -1,6 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { CalendarEvent, CalendarModule, CalendarView } from 'angular-calendar';
+import {
+  CalendarCommonModule,
+  CalendarEvent,
+  CalendarModule,
+  CalendarView,
+} from 'angular-calendar';
 import { Observable, map } from 'rxjs';
 import { EventDetailsDto } from '../../../../shared/models/event/event-details.dto';
 import { EventsService } from '../../../../core/services/events.service';
@@ -8,7 +13,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-my-events-calendar',
-  imports: [CommonModule, CalendarModule, RouterLink],
+  imports: [CommonModule, CalendarModule, CalendarCommonModule, RouterLink],
   templateUrl: './my-events-calendar.component.html',
   styleUrls: ['./my-events-calendar.component.scss'],
 })
