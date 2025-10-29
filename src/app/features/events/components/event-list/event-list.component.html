@@ -20,7 +20,7 @@
     @for (event of events; track event.id) {
     <mat-card
       class="flex flex-col cursor-pointer hover:shadow-xl transition-shadow duration-300"
-      [routerLink]="['/events', event.id]"
+      [routerLink]="['/event', event.id]"
     >
       <mat-card-header class="!pb-2">
         <mat-card-title class="!text-lg !font-semibold">{{

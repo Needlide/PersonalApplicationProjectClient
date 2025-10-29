@@ -2790,6 +2790,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ngrx/operators@npm:^20.1.0":
+  version: 20.1.0
+  resolution: "@ngrx/operators@npm:20.1.0"
+  dependencies:
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    rxjs: ^6.5.3 || ^7.4.0
+  checksum: 10c0/c590cab4105d8861282331f1c7e8ecb7bbfb0dedf48fa9be9e9fa55219945b37d2fad523454cae538bce6ed0d5e9551c5026ecc726dac163acd70ba6c0613e29
+  languageName: node
+  linkType: hard
+
+"@ngrx/signals@npm:^20.1.0":
+  version: 20.1.0
+  resolution: "@ngrx/signals@npm:20.1.0"
+  dependencies:
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/core": ^20.0.0
+    rxjs: ^6.5.3 || ^7.4.0
+  peerDependenciesMeta:
+    rxjs:
+      optional: true
+  checksum: 10c0/5ee2df30ac5c85540c035f40312f9f3af87388686b9dee086e834098af6bfd9221641e0304be66ebfb67ac377330565b6fbd8f820078ec3c5d014cdf18549390
+  languageName: node
+  linkType: hard
+
 "@ngtools/webpack@npm:19.2.18":
   version: 19.2.18
   resolution: "@ngtools/webpack@npm:19.2.18"
@@ -8895,6 +8921,8 @@ __metadata:
     "@angular/platform-browser-dynamic": "npm:^19.2.15"
     "@angular/router": "npm:^19.2.15"
     "@google/generative-ai": "npm:^0.24.1"
+    "@ngrx/operators": "npm:^20.1.0"
+    "@ngrx/signals": "npm:^20.1.0"
     "@tailwindcss/postcss": "npm:^4.1.16"
     "@types/jasmine": "npm:~5.1.0"
     angular-calendar: "npm:^0.31.1"

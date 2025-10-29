@@ -22,6 +22,7 @@ import {
 import { Operation } from 'fast-json-patch/module/core';
 import { compare } from 'fast-json-patch/module/duplex';
 import { UpdateEventRequestDto } from '../../../../shared/models/event/update-event-request.dto';
+import { UserStore } from '../../../../core/store/user.store';
 
 @Component({
   selector: 'app-event-details',
@@ -49,6 +50,7 @@ export class EventDetailsComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
+  private readonly userStore = inject(UserStore);
 
   event$!: Observable<EventDetailsDto | null>;
 
@@ -81,9 +83,8 @@ export class EventDetailsComponent implements OnInit {
         return this.eventService.getEventById(id);
       }),
       tap((event) => {
-        this.authService.currentUser$.subscribe((user) => {
-          this.isOrganizer = user?.id === event.organizer.id;
-        });
+        this.isOrganizer =
+          this.userStore.currentUser()?.id === event.organizer.id;
 
         this.originalEditableEvent = {
           name: event.name,
