@@ -1,13 +1,19 @@
-FROM node:20-alpine AS build
+FROM node:20 AS build
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+COPY .yarnrc.yml* yarn.lock* ./
+
+RUN corepack enable
+RUN echo 'nodeLinker: node-modules' > .yarnrc.yml
+
+# Install dependencies
+RUN yarn install
 
 COPY . .
 
-RUN npm run build -- --configuration production
+RUN yarn build --configuration production
 
 
 FROM nginx:stable-alpine
